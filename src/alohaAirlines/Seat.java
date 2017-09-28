@@ -1,4 +1,4 @@
-package AlohaAirlines;
+package alohaAirlines;
 
 public class Seat {
 
