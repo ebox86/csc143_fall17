@@ -40,6 +40,7 @@ public class Seat {
 	public CustomerConfirmation getCustomerConfirmation(){
 		return this.confirmation;
 	}
+
 	
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
