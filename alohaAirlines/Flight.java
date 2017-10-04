@@ -12,7 +12,7 @@ public class Flight {
 	private String date;
 	//private SimpleDateFormat date;
 	private int bookedSeatCount;
-	public Seat[][] seatArr;
+	private Seat[][] seatArr;
 	
 	/**
 	 * Flight -- constructs a new Flight object
@@ -75,18 +75,32 @@ public class Flight {
 	 * @return Seat -- the requested seat
 	 */
 	public Seat getSeat(int row, int col){
-		return seatArr[row - 1][col];
+		return seatArr[row - 1][col - 1];
+	}
+	
+	/**
+	 * bookSeat -- books a seat with a passenger an the flight
+	 * @param row -- the row of the seat
+	 * @param col -- the column of the seat
+	 * @param name -- the name of the passenger
+	 * @param code -- the confirmation code to assign to the passenger
+	 * @throws Exception
+	 */
+	public void bookSeat(int row, int col, String name, String code) throws Exception {
+		Seat s = getSeat(row, col);
+		if(s.getCustomerConfirmation() != null) {
+			throw new Exception("seat already booked");
+		}
+		s.setCustomerConfirmation(name, code);
 	}
 	
 	/**
 	 * SeatMap -- a pseudo-graphical representation of the currently booked seats
 	 * @return String representation of plane and seats
 	 */
-	public String SeatMap(){
+	public String seatMap(){
 		StringBuilder sb = new StringBuilder();
-		sb.append("\nFlt #" + this.id + " from " + this.origin +
-				" to " + this.destination + ", " + this.date +
-				"\n\n   A B C   D E F\n");
+		sb.append(this.toString() + "\n\n   A B C   D E F\n");
 		for(int i = 0; i < 41; i++){
 			if(i != 0){
 				sb.append("\n" + i + " ");
@@ -116,6 +130,14 @@ public class Flight {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * toString -- returns a string of the flight data
+	 */
+	public String toString(){
+		return "Flt #" + this.id + " from " + this.origin +
+		" to " + this.destination + ", " + this.date;
 	}
 
 	
