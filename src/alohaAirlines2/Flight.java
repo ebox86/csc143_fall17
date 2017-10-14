@@ -13,6 +13,12 @@ public class Flight {
 	//private SimpleDateFormat date;
 	private Seat[][] seatArr;
 	private double basePrice;
+	private Seat[] first;
+	private Seat[] comfort;
+	private Seat[] economy;
+	private int firstRow;
+	private int comfortRow;
+	private int economyRow;
 	
 	/**
 	 * Flight -- constructs a new Flight object
@@ -22,37 +28,60 @@ public class Flight {
 	 * @param date -- the flight date
 	 * @throws Exception
 	 */
-	public Flight (String id, String origin, String destination, String date) throws Exception {
+	public Flight (String id, String origin, String destination, String date, double basePrice) throws IllegalArgumentException {
 		if(id == null || id.isEmpty()){
-			throw new Exception("flight id must be specified");
+			throw new IllegalArgumentException("flight id must be specified");
 		}
 		if(origin == null || origin.isEmpty()){
-			throw new Exception("flight origin must be specified");
+			throw new IllegalArgumentException("flight origin must be specified");
 		}
 		if(destination == null || destination.isEmpty()){
-			throw new Exception("flight destination must be specified");
+			throw new IllegalArgumentException("flight destination must be specified");
 		}
 		if(origin.length() > 3){
-			throw new Exception("flight origin airport code invalid");
+			throw new IllegalArgumentException("flight origin airport code invalid");
 		}
 		if(destination.length() > 3){
-			throw new Exception("flight destination airport code invalid");
+			throw new IllegalArgumentException("flight destination airport code invalid");
 		}
 		if(date == null || date.isEmpty()){
-			throw new Exception("flight date must be specified");
+			throw new IllegalArgumentException("flight date must be specified");
+		}
+		if(basePrice <= 0.0){
+			throw new IllegalArgumentException("base price must be specified and > 0.0");
 		}
 		SimpleDateFormat sd = new SimpleDateFormat();
+		this.basePrice = basePrice;
 		this.id = id;
 		this.origin = origin.toUpperCase();
 		this.destination = destination.toUpperCase();
 		this.date = date;
-		seatArr = new Seat[40][6];
-		for(int i = 0; i < 40; i++){
-			for(int j = 0; j < 6; j++){
-				seatArr[i][j] = new Seat(i + 1, j + 1, 10.0, 6, Seat.mealType.Full, this);
+		this.first = new Seat[6];
+		this.comfort = new Seat[8];
+		this.economy = new Seat[30];
+		this.firstRow = 4;
+		this.comfortRow = 6;
+		this.economyRow = 8;
+		seatArr = new Seat[3][];
+		for(int i = 0; i < economy.length; i++){
+			for(int j = 0; j < economyRow; j++){
+				economy[j] = new EconomySeat(i + 1, j + 1, this);
 			}
 		}
-	}
+		for(int i = 0; i <= comfort.length; i++){
+			for(int j = 0; j < comfortRow; j++){
+				comfort[j] = new ComfortSeat(i + 1, j + 1, this);
+			}
+		}
+		for(int i = 0; i <= first.length; i++){
+			for(int j = 0; j < firstRow; j++){
+				first[j] = new FirstClassSeat(i + 1, j + 1, this);
+			}
+		}
+		seatArr[0] = this.economy;
+		seatArr[1] = this.comfort;
+		seatArr[2] = this.first;
+}
 	
 	/**
 	 * getBookedCount -- returns an integer value of the number of booked seats on the flight
@@ -70,8 +99,19 @@ public class Flight {
 		return bookedSeatCount;
 	}
 	
+	/**
+	 * getBasePrice -- returns the basePrice of the flight
+	 * @return basePrice of the flight
+	 */
 	public double getBasePrice(){
 		return basePrice;
+	}
+	
+	/**
+	 * setBasePrice -- sets the basePrice of the flight
+	 */
+	public void setBasePrice(double basePrice){
+		this.basePrice = basePrice;
 	}
 	
 	/**\
@@ -79,8 +119,17 @@ public class Flight {
 	 * @param id -- the seat number used to identify the seat
 	 * @return Seat -- the requested seat
 	 */
-	public Seat getSeat(int row, int col){
-		return seatArr[row - 1][col - 1];
+	public Seat getSeat(int row, int col, String seatClass){
+		return seatArr[row - 1][col -1];
+		/*
+		if(seatClass == "Economy"){
+			Seat tempSeatArr = seatArr[0][row];
+			return tempSeatArr;
+		} else if(seatClass == "Comfort") {
+			Seat[] tempSeatArr = seatArr[1];
+			return tempSeatArr[row - 1][col -1];
+		}
+		*/
 	}
 	
 	/**
@@ -91,12 +140,19 @@ public class Flight {
 	 * @param code -- the confirmation code to assign to the passenger
 	 * @throws Exception
 	 */
-	public void bookSeat(int row, int col, String name, String code) throws Exception {
-		Seat s = getSeat(row, col);
-		if(s.getCustomerConfirmation() != null) {
-			throw new Exception("seat already booked");
+	public void bookSeat(int row, int col, String name, String code, String seatClass, boolean clubMember) throws Exception {
+		Seat s = null;
+		if(seatClass == "Economy"){
+			s = new EconomySeat(row, col, this);
+		} else if (seatClass == "Comfort"){
+			s = new ComfortSeat(row, col, this);
+		} else {
+			s = new FirstClassSeat(row, col, this);
 		}
-		s.setCustomerConfirmation(name, code);
+		if(s.getCustomerConfirmation() != null) {
+			throw new IllegalArgumentException("seat already booked");
+		}
+		s.setCustomerConfirmation(name, code, clubMember);
 	}
 	
 	/**

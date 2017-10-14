@@ -1,6 +1,12 @@
 package alohaAirlines2;
 
-public class Seat {
+/**
+ * 
+ * Seat -- abstract seat class for Project2
+ * @author evankoh
+ * @version project 2
+ */
+public abstract class Seat {
 
 	private final String seatId;
 	private final int row;
@@ -10,6 +16,7 @@ public class Seat {
 	private mealType meal;
 	private CustomerConfirmation confirmation;
 	private Flight flight;
+	private classType seatClass;
 	
 	/**
 	 * Seat -- constructs s new Seat
@@ -18,20 +25,20 @@ public class Seat {
 	 * @param price -- the price of the seat
 	 * @param recline -- the number of inches of recline room for the seat
 	 * @param meal -- the meal choice for the seat
-	 * @throws Exception
+	 * @throws IllegalArgumentException
 	 */
-	public Seat(int row, int col, double price, int recline, mealType meal, Flight flight) throws Exception {
+	public Seat(int row, int col, double price, int recline, mealType meal, Flight flight, classType seatClass) throws IllegalArgumentException {
 		if(price <= 0.0){
-			throw new Exception("price cannot be less than or equal to zero dollars");
+			throw new IllegalArgumentException("price cannot be less than or equal to zero dollars");
 		};
-		if(row < 1 || row > 40){
-			throw new Exception("seat row must be between 1 and 40, inclusive");
+		if(row < 1 || row > 44){
+			throw new IllegalArgumentException("seat row must be between 1 and 40, inclusive");
 		};
-		if(col < 1 || col > 6){
-			throw new Exception("seat column must be between 1 and 6, inclusive");
+		if(col < 1 || col > 8){
+			throw new IllegalArgumentException("seat column must be between 1 and 6, inclusive");
 		};
 		if(recline <= 0){
-			throw new Exception("seat cannot recline below 0 degrees");
+			throw new IllegalArgumentException("seat cannot recline below 0 degrees");
 		};
 		this.row = row;
 		this.col = col;
@@ -40,6 +47,7 @@ public class Seat {
 		this.recline = recline;
 		this.confirmation = null;
 		this.flight = flight;
+		this.seatClass = seatClass;
 	}
 	
 	/**
@@ -47,6 +55,13 @@ public class Seat {
 	 */
 	public enum mealType {
 		Gourmet, Full, Snack
+	}
+	
+	/**
+	 * classType -- enum which corresponds to the class of the seat
+	 */
+	public enum classType {
+		First, Comfort, Economy
 	}
 	
 	/**
@@ -70,7 +85,33 @@ public class Seat {
 	 * @return
 	 */
 	public double getCalculatedPrice() {
-		return calculatedPrice;
+		double tempPrice = 0.0;
+		CustomerConfirmation tempCustomer = null;
+		// check if there is a customerConfirmation set
+		if(getCustomerConfirmation() != null){
+			tempCustomer = getCustomerConfirmation();
+		}
+		// check for seatClass and club membership
+		if(seatClass == seatClass.Economy){
+			tempPrice = flight.getBasePrice();
+			if(tempCustomer != null && tempCustomer.getClubMember()){
+				// Aloha Club discount
+				tempPrice -= (tempPrice * 0.02);
+			}
+		} else if(seatClass == seatClass.Comfort){
+			tempPrice = flight.getBasePrice() * 1.5;
+			if(tempCustomer != null && tempCustomer.getClubMember()){
+				// Aloha Club discount
+				tempPrice -= (tempPrice * 0.05);
+			}
+		} else if(seatClass == seatClass.First){
+			tempPrice = flight.getBasePrice() * 2.0;
+			if(tempCustomer != null && tempCustomer.getClubMember()){
+				// Aloha Club discount
+				tempPrice -= (tempPrice * 0.1);
+			}
+		}
+		return tempPrice;
 	}
 	
 	/**
@@ -81,12 +122,20 @@ public class Seat {
 		return recline;
 	}
 	
+	public String getSeatId(){
+		return seatId;
+	}
+	
+	public classType getSeatClass(){
+		return seatClass;
+	}
+	
 	/**
 	 * CustomerConfirmation -- returns the customer confirmation for a seat
 	 * @return the confirmation object
 	 */
 	public CustomerConfirmation getCustomerConfirmation(){
-		return this.confirmation;
+			return this.confirmation;
 	}
 	
 	/**
@@ -95,25 +144,28 @@ public class Seat {
 	 * @param code -- the confirmation code itself
 	 * @throws Exception
 	 */
-	public void setCustomerConfirmation(String name, String code) throws Exception {
-		confirmation = new CustomerConfirmation(name, code);
+	public void setCustomerConfirmation(String name, String code, boolean member) throws Exception {
+		confirmation = new CustomerConfirmation(name, code, member);
 	}
 
 	/**
 	 * toString -- returns a string of all the seat information
 	 */
 	public String toString(){
-		StringBuilder sb = new StringBuilder();
-		sb.append("Seat number: " + this.seatId + ", "
-				+ " basePrice: " + flight.getBasePrice() + ", "
-				+ " meal: " + this.meal + ", "
-				+ " recline: " + this.recline);
-		return sb.toString();
+		String returnString = "Seat number: " + getSeatId() + ", "
+				+ " seatPrice: " + getCalculatedPrice() + ", "
+				+ " meal: " + getMeal().toString() + ", "
+				+ " recline: " + getRecline() + ", "
+				+ " class: " + getSeatClass().toString();
+		if(getCustomerConfirmation() != null){
+			returnString += getCustomerConfirmation().toString();
+		}
+		return returnString;
 	}
 	
 	// used to convert an integer value to its corresponding ASCII representation
-	private String getCharForNum(int i) {
-	    char[] alphabet = "ABCDEF".toCharArray();
+	protected String getCharForNum(int i) {
+	    char[] alphabet = "ABCDEFGH".toCharArray();
 	    return Character.toString(alphabet[i - 1]);
 	}
 }

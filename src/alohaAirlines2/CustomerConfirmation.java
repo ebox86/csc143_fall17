@@ -7,8 +7,9 @@ package alohaAirlines2;
  */
 public class CustomerConfirmation {
 	private String customerName;
-	private String confirmationCode;
+	private String confirmationCode; 
 	private double bookedPrice;
+	private boolean clubMember;
 	
 	/**
 	 * CustomerConfirmation -- saves a booked flight and bounds it to a seat
@@ -16,7 +17,7 @@ public class CustomerConfirmation {
 	 * @param confirmationCode
 	 * @throws Exception
 	 */
-	public CustomerConfirmation(String customerName, String confirmationCode) throws Exception {
+	public CustomerConfirmation(String customerName, String confirmationCode, boolean clubMember) throws Exception {
 		if(customerName == null || customerName.isEmpty()){
 			throw new Exception("customer name cannot be empty");
 		}
@@ -25,12 +26,24 @@ public class CustomerConfirmation {
 		}
 		this.customerName = customerName;
 		this.confirmationCode = confirmationCode;
+		this.clubMember = clubMember;
+	}
+	
+	public CustomerConfirmation getConfirmation(){
+		return this;
+	}
+	
+	public boolean getClubMember(){
+		return clubMember;
 	}
 	
 	/** 
 	 * toString -- overridden toString method
 	 */
 	public String toString(){
-		return "customer confirmation: " + this.confirmationCode + ", customer name: " + this.customerName;
+		String club = getClubMember() ? "true" : "false";
+		return "customer confirmation: " + this.confirmationCode 
+				+ ", customer name: " + this.customerName
+				+ ", Aloha Club member: " + club;
 	}
 }
