@@ -2,18 +2,20 @@ package drawingApp;
 
 public class Shape {
 
-	public Shape(String string) {
-		// TODO Auto-generated constructor stub
+	private String name;
+	
+	
+	public Shape(String name) {
+		this.name = name;
 	}
 
 	public void addPoint(Point point) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 }
