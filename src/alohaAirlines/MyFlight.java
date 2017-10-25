@@ -3,12 +3,11 @@ package alohaAirlines;
 public class MyFlight {
 
 	/*
-	 * This is a test class which is used to show the supplier code working
-	 * with some dummy data i have added
+	 * This is a test class which is used to show the supplier code working with
+	 * some dummy data i have added
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println("### welcome to Aloha Airlines\n###\n"
-				+ "### Central Booking System\n"
+		System.out.println("### welcome to Aloha Airlines\n###\n" + "### Central Booking System\n"
 				+ "### (c) 1984 Aloha Airlines - Rights Reserved");
 
 		Flight myFlight = new Flight("A1101", "OHR", "SEA", "2017/01/01");
@@ -22,7 +21,7 @@ public class MyFlight {
 		System.out.println(tempSeat.getCustomerConfirmation().toString());
 		System.out.println(tempSeat.toString());
 		System.out.println(myFlight.getBookedCount());
-		
+
 	}
 
 }

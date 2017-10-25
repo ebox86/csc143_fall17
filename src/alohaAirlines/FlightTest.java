@@ -8,7 +8,6 @@ import junit.framework.Assert;
 
 public class FlightTest {
 
-	
 	/*
 	 * tests a flight
 	 */

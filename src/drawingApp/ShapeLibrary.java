@@ -8,27 +8,30 @@ import java.io.ObjectInputStream;
 
 public class ShapeLibrary {
 
-	ArrayList ShpArray = new ArrayList<Shape>();
+	ArrayList<Shape> ShpArray = new ArrayList<Shape>();
 	
 	public ShapeLibrary() {
-		File shapeDir = new File("shapes");
-		File[] folderContents = shapeDir.listFiles();
+		File directory = new File("src/drawingApp/shapes");
+		File[] shapes = directory.listFiles();
         // Deserialize
         System.out.println("Deserialization starting");
-        try {
-            FileInputStream shapeFile = new FileInputStream("people.ser");
-            ObjectInputStream in = new ObjectInputStream(peopleFile);
-            int peopleCount = (int)in.readObject();
-            for (int idx = 0; idx < peopleCount; idx++) {
-                collegePeople[idx] = (Person)in.readObject();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File Not Found!");
-        } catch (IOException e) {
-            System.out.println("Disk Error!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Internal Error!");
-        }
+        for (File file : shapes) {
+	        try {
+	            FileInputStream shapeFile = new FileInputStream(file);
+	            System.out.println("file input");
+	            ObjectInputStream in = new ObjectInputStream(shapeFile);
+	            System.out.println("object input");
+	            ShpArray.add((Shape)in.readObject());
+	            System.out.println("add to array");
+	            in.close();
+	        } catch (FileNotFoundException e) {
+	            System.out.println("File Not Found!");
+	        } catch (IOException e) {
+	            System.out.println("Disk Error!");
+	        } catch (ClassNotFoundException e) {
+	            System.out.println(e);
+	        }
         System.out.println("Deserialization complete\n");
+        }
 	}
 }

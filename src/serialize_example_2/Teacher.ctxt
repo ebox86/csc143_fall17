@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=id\ name\ email
+comment0.target=Teacher(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment1.params=id
+comment1.target=boolean\ isValidId(java.lang.String)
+comment2.params=course
+comment2.target=void\ addCourseTaught(java.lang.String)
+comment3.params=
+comment3.target=java.lang.String\ toString()
+numComments=4
