@@ -1,12 +1,13 @@
 package drawingApp;
 
+import java.io.Serializable;
 import java.util.*;
 /**
  * Generic ArrayList
  *
  * @param <E> the type of the elements
  */
-public class ArrayList<E> {
+public class ArrayList<E> implements Serializable, Iterable<E>{
     private E[] elementData;
     private int size;
 
@@ -121,7 +122,6 @@ public class ArrayList<E> {
     }
 
     // pre : 0 <= index < size() (throws IndexOutOfBoundsException if not)
-    // post: replaces the value at the given index with the given value
     public void set(int index, E value) {
         checkIndex(index);
         elementData[index] = value;

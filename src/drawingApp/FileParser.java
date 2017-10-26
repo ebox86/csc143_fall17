@@ -5,25 +5,35 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class FileParser {
-
+	private CanvasInstruction canvasInstruction;
+	public CanvasInstruction getCanvasInstruction() {
+		return canvasInstruction;
+	}
+	public void setCanvasInstruction(CanvasInstruction canvas) {
+		this.canvasInstruction = canvas;
+	}
+	public ArrayList<DrawInstruction> getInstructions() {
+		return instructions;
+	}
+	public void setInstructions(ArrayList<DrawInstruction> instructions) {
+		this.instructions = instructions;
+	}
+	private ArrayList<DrawInstruction> instructions;
+	
 	public FileParser(File file) throws FileNotFoundException {
 		Scanner scanner = new Scanner(file);
         scanner.useDelimiter("\n");
-        
+        instructions = new ArrayList<DrawInstruction>();
         while(scanner.hasNext()){
             String line = scanner.nextLine();
             Scanner s2 = new Scanner(line);
-            s2.useDelimiter(",");
             if(line.contains("width")){
-            	Canvas c = new Canvas();
-            	while(s2.hasNext()){
-            		String kvpCanvas = s2.next();
-            		c.addField(kvpCanvas.split("="));
-            	}
+            	canvasInstruction = CanvasInstruction.readFromFile(s2);
             } else {
-            	while(s2.hasNext()){
-            		
-            	}
+            	//System.out.println(line);
+            	DrawInstruction instruction = DrawInstruction.readFromFile(s2);
+            	instructions.add(instruction);
+            	//System.out.println(instructions.size());
             }
         }
         scanner.close();

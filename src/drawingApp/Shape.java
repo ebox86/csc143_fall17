@@ -4,51 +4,34 @@ import java.io.Serializable;
 
 public class Shape implements Serializable {
 
-	private String id;
-	private String name;
-	private String email;
-	
-	
-	public Shape(String id, String name, String email) {
-        setId(id);
-        setName(name);
-        setEmail(email);
-	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	private static final long serialVersionUID = 9064162150981715910L;
+	private String name;
+	private ArrayList<Point> points;
 	
-    public String getId()     {
-        return id;
-    }
-    
+	public Shape(String name) {
+        setName(name);
+        points = new ArrayList<Point>();
+	}
+  
     
     public void setName(String name) {
         this.name = name;
     }
     
-	/**
-	 * Returns the name of the shape
-	 * @return name of shape
-	 */
+	
+	public void addPoint(Point point) {
+		points.add(point);
+	}
+
 	public String getName() {
+		// TODO Auto-generated method stub
 		return name;
 	}
 
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-	
-	public void addPoint(Point point) {
-		
-		
+
+	public ArrayList<Point> getPoints() {
+		return points;
 	}
-
-
 
 }
