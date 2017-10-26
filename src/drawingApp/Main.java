@@ -8,15 +8,20 @@ import java.nio.file.Paths;
 
 public class Main {
     
-    public static void main(String[] args)  {
+	/**
+	 * Main class for drawing app
+	 * @param args
+	 */
+    public static void main(String[] args) {
+    	/*
     	Utility utility = new Utility();
-    	/*try {
+    	try {
 			utility.createShapeLib();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
-    	 Path folderPath = Paths.get(".");
-    	 String path = folderPath.toAbsolutePath().toString() + "/src/drawingApp/";
+    	Path folderPath = Paths.get(".");
+    	String path = folderPath.toAbsolutePath().toString() + "/src/drawingApp/";
         ShapeLibrary shapeLib  = new ShapeLibrary();
         Drawing drawing1 = new Drawing(shapeLib, new File(path + "Instruct-Simple.txt"));
         Drawing drawing2 = new Drawing(shapeLib, new File(path + "Instruct-Rand.txt"));

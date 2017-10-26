@@ -3,7 +3,7 @@ package drawingApp;
 import java.io.Serializable;
 import java.util.*;
 /**
- * Generic ArrayList
+ * Generic ArrayList -- starting capacity 50
  *
  * @param <E> the type of the elements
  */

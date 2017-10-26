@@ -2,6 +2,11 @@ package drawingApp;
 
 import java.io.Serializable;
 
+/**
+ * Used to create a singular Point object
+ * @author evankoh
+ *
+ */
 public class Point implements Serializable {
     private double x, y;  
 

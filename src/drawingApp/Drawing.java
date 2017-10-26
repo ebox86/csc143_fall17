@@ -1,9 +1,16 @@
 package drawingApp;
 
+import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Drawing -- used to create drawing objects, or shapes, for use on the canvas
+ * @author evankoh
+ *
+ */
 public class Drawing {
 	private ShapeLibrary shapeLib;
 	private ArrayList<DrawInstruction> instructions;
@@ -16,7 +23,6 @@ public class Drawing {
 			canvas = parser.getCanvasInstruction();
 			this.shapeLib = shapeLib;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block Oh noooooo 
 			e.printStackTrace();
 		}
 	
@@ -31,19 +37,29 @@ public class Drawing {
 		
 			Shape shape = getShapeByName(instruction.getShapeName());
 			int repeats = instruction.getRepeats();
-			instruction.getColor();
-			instruction.getFilled();
+			Color c = instruction.getColor();
+			boolean f = instruction.getFilled();
 			int oX = instruction.getRepeatOffsetX();
 			int oY = instruction.getRepeatOffsetY();
 			int sX = instruction.getStartingX();
-			int Sy = instruction.getStartingY();
-			instruction.getScalePercent();
+			int sY = instruction.getStartingY();
+			int scale = instruction.getScalePercent();
+			int rotateAngle = instruction.getRotate();
 			for( int i =0; i < repeats; i ++ ) {
 				Polygon p = new Polygon();
 				for(Point point : shape.getPoints()) {
-					p.addPoint((int)point.getX() + sX + oX, (int)point.getY() + sX + oY);
+					p.addPoint(sX + ((int)point.getX() * scale/100 ) + oX, sY + ((int)point.getY() *scale/100) + oY);
 				}
+				panel.getGraphics().setColor(c);
+				
+				
+				
 				panel.getGraphics().drawPolygon(p);
+				if(f){
+					panel.getGraphics().fill(p);
+				}
+				double theta = (Math.PI * rotateAngle )/180;
+				panel.getGraphics().rotate(theta); 
 			}
 			
 		

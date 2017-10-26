@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * File Parser -- used to parse the text file lines 
+ * @author evankoh
+ *
+ */
 public class FileParser {
 	private CanvasInstruction canvasInstruction;
 	public CanvasInstruction getCanvasInstruction() {
@@ -30,13 +35,10 @@ public class FileParser {
             if(line.contains("width")){
             	canvasInstruction = CanvasInstruction.readFromFile(s2);
             } else {
-            	//System.out.println(line);
             	DrawInstruction instruction = DrawInstruction.readFromFile(s2);
             	instructions.add(instruction);
-            	//System.out.println(instructions.size());
             }
         }
         scanner.close();
 	}
-
 }
