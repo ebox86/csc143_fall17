@@ -16,7 +16,7 @@ public class Drawing {
 	private ArrayList<DrawInstruction> instructions;
 	private CanvasInstruction canvas;
 	public Drawing(ShapeLibrary shapeLib, File file) {
-		 shapeLib = shapeLib;
+		 this.shapeLib = shapeLib;
 		 try {
 			FileParser parser = new FileParser(file);
 			instructions = parser.getInstructions();
@@ -25,7 +25,6 @@ public class Drawing {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	
 	}
 
 	public void draw() {
@@ -34,7 +33,6 @@ public class Drawing {
 		panel.setHeight(canvas.getHeight());
 		panel.setWidth(canvas.getWidth());
 		for(DrawInstruction instruction : instructions) {
-		
 			Shape shape = getShapeByName(instruction.getShapeName());
 			int repeats = instruction.getRepeats();
 			Color c = instruction.getColor();
@@ -45,27 +43,22 @@ public class Drawing {
 			int sY = instruction.getStartingY();
 			int scale = instruction.getScalePercent();
 			int rotateAngle = instruction.getRotate();
-			for( int i =0; i < repeats; i ++ ) {
+			for( int i = 0; i < repeats; i++) {
+				System.out.println(i);
+				System.out.println(repeats);
 				Polygon p = new Polygon();
 				for(Point point : shape.getPoints()) {
-					p.addPoint(sX + ((int)point.getX() * scale/100 ) + oX, sY + ((int)point.getY() *scale/100) + oY);
+					p.addPoint(sX + ((int)point.getX() * scale/100), sY + ((int)point.getY() * scale/100));
 				}
 				panel.getGraphics().setColor(c);
-				
-				
-				
 				panel.getGraphics().drawPolygon(p);
 				if(f){
 					panel.getGraphics().fill(p);
 				}
-				double theta = (Math.PI * rotateAngle )/180;
-				panel.getGraphics().rotate(theta); 
+				//double theta = (Math.PI * rotateAngle )/180;
+				//panel.getGraphics().rotate(theta); 
 			}
-			
-		
-			
 		}
-		
 	}
 	
 	private Shape getShapeByName(String name) {
@@ -76,6 +69,4 @@ public class Drawing {
 		}
 		return null;
 	}
-	
-
 }
