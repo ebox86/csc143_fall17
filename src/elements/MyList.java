@@ -3,10 +3,10 @@ package elements;
 import java.util.Iterator;
 
 /**
- * An interface similar to but not as complete as java.util.List.
+ * List interface used for ElementList
  */
 
-public interface MyList<E> extends Iterable<E> {
+public interface MyList<Element> extends Iterable<Element> {
 
 	/**
 	 * Returns the number of elements in this list.
@@ -21,7 +21,7 @@ public interface MyList<E> extends Iterable<E> {
 	/**
 	 * Appends the specified element to the end of this list
 	 */
-	public boolean add(E o);
+	public boolean add(Object e);
 
 	/**
 	 * Empty this List
@@ -31,7 +31,7 @@ public interface MyList<E> extends Iterable<E> {
 	/**
 	 * Returns the element at the specified position in this list.
 	 */
-	public E get(int index);
+	public Element get(int index);
 
 	/**
 	 * Returns the index of the specified element (-1 if there is no match)
@@ -56,7 +56,7 @@ public interface MyList<E> extends Iterable<E> {
 	/**
 	 * Add the specified object at the specified location
 	 */
-	public boolean add(int index, E o);
+	public boolean add(int index, Element e);
 
 	/**
 	 * Is this List equal to the specified object?
@@ -66,5 +66,5 @@ public interface MyList<E> extends Iterable<E> {
 	/**
 	 * Returns an iterator over the elements in this list in proper sequence.
 	 */
-	public Iterator<E> iterator();
+	public Iterator<Element> iterator();
 }
