@@ -8,30 +8,60 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * ElementList -- builds a new Doubly Linked List
+ * @author evankoh
+ *
+ */
 public class ElementList {
     private Node front;
 	private Node back;
 	private int size;
 	
+	/**
+	 * default constructor -- constructs a new list, sets size to 0
+	 */
 	public ElementList() {
-		front = new Node(null);
-		back = new Node(null);
-		clear();
+		size = 0;
 	}
 	
+	/**
+	 * Node used for Linked List
+	 * @author evankoh
+	 *
+	 */
+	public class Node {
+		public Node next;
+		public Node prev;
+		public Element data;
+
+		/** 
+		 * Default constructor for node, accepts single element to store
+		 * @param e
+		 */
+		public Node (Element e){
+			this.data = e;
+		}
+
+	}
+	
+	/**
+	 * loads a text file of elements into the list
+	 * @param the file to load
+	 * @throws FileNotFoundException
+	 */
 	public void loadDataFromFile(File file) throws FileNotFoundException{
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 	            String[] fileParts = line.split(",");
 	            Element element = new Element(Integer.parseInt(fileParts[0]), fileParts[1], fileParts[2], Double.parseDouble(fileParts[3]));
-	            add(element);
+	            sortedAdd(element);
 	    	}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -51,56 +81,129 @@ public class ElementList {
 	/**
 	 * Returns true if the provided value is present in the list
 	 */
-	public boolean contains(Object o) {
-		return indexOf(o) >= 0;
+	public boolean contains(Element e) {
+		return indexOf(e) >= 0;
 	}
 
 	public LinkedIterator iterator() {
 		return new LinkedIterator();
 	}
 
-	public boolean add(Element e) {
-		if (front == null) {
-			back = new Node(e);
-		} else {
-			Node node = front;
-			// loop until the last node
-			//for ( ; node.next != null; node = node.next) {}
-	        while(node.next != null){
-	            node = node.next;
-	        }
-			node.next = new Node(e);
-		}
-		size++;
-		return true;
+    /**
+     * adds element at the starting of the linked list
+     * @param element
+     */
+    private void addFirst(Element e) {
+	    Node newNode = new Node(e);
+	    if( isEmpty() ){
+	       back = newNode;
+	       front = newNode;
+	    } else {
+	       front.prev = newNode;
+	    }
+	    newNode.next = front;
+	    front = newNode;
+	    size++;
+    }
+
+    /**
+     * adds element at the end of the linked list
+     * @param element
+     */
+	private void addLast(Element e) {
+	  Node p = new Node(e);
+	  if (front == null) {
+	   front = p;
+	  } else {
+	   Node s = front;
+	   while (s.next != null) {
+	    s = s.next;
+	   }
+	   s.next = p;
+	   p.prev = s;
+	  }
+	  size++;
 	}
 
-	public boolean add(int index, Object e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	/**
+	 * adds an element to the list and sorts it to its correct place
+	 * @param element
+	 */
+	public void sortedAdd(Element element) {
 
-	public boolean remove(Object o) {
-		int index = indexOf(o);
+	    // new list
+	    if (front == null) {
+	        front = new Node(element);
+	        ++size;
+	        return;
+	    }
+	    Node current = front;
+	    Node prev = null;
+	    while (current != null && (element.compareTo(current.data) > 0)) {
+	        prev = current;
+	        current = current.next;
+	    }
+	    // the last
+	    if (current == null) {
+	        current = new Node(element);
+	        current.prev = prev;
+	        prev.next = current;
+	        ++size;
+	        return;
+	    }
+	    //the first
+	    if (prev == null){
+	        prev = new Node(element);
+	        current.prev = prev;
+	        prev.next = current;
+	        front = prev;
+	        ++size;
+	        return;
+	    }
+	    Node temp = new Node(element);
+	    temp.next = current;
+	    temp.prev = current.prev;
+	    current.prev.next = temp;
+	    current.prev = temp;
+	    ++size;
+	}
+	
+	/**
+	 * removes an element from the list
+	 * @param the element to remove
+	 * @return boolean as to whether the remove was successful
+	 */
+	public boolean remove(Element e) {
+		int index = indexOf(e);
 		return index != -1 ? remove(index) : false;
 	}
 
 
+	/**
+	 * clears the linked list 
+	 */
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		front.next = back;
+        back.prev = front;
+        size = 0;
 	}
 
+	/**
+	 * Retrieves the element at the specified index position
+	 * @param index of list item to retrieve
+	 * @return the Element at the index 
+	 */
 	public Element get(int index) {
         checkIndex(index);
         Node current = nodeAt(index);
         return current.data;
 	}
 
-	public boolean add(int index, Element element) {
-		return false;
-	}
-
+	/**
+	 * removes the element at the specified index value
+	 * @param index of the element to remove
+	 * @return true if removed succeeded, false if otherwise
+	 */
 	public boolean remove(int index) {
 		if (index < 0 || index >= size) {
 			throw new IndexOutOfBoundsException("index = " + index);
@@ -127,13 +230,25 @@ public class ElementList {
 		return true;
 	}
 
-
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * Returns the index of the first occurrence of a given element
+	 * @param e
+	 * @return
+	 */
+	public int indexOf(Element e) {
+        int index = 0;
+        Node current = front.next;
+        while (current !=  back) {
+            if (current.data.equals(e)) {
+                return index;
+            }
+            index++;
+            current = current.next;
+        }
+        return -1;
 	}
 	
-    // post: throws an IndexOutOfBoundsException if the given index is
+    // throws an IndexOutOfBoundsException if the given index is
     //       not a legal index of the current list
     private void checkIndex(int index) {
         if (index < 0 || index >= size()) {
@@ -141,8 +256,7 @@ public class ElementList {
         }
     }
     
-    // pre : 0 <= index < size()
-    // post: returns the node at a specific index.  Uses the fact that the list
+    //		 returns the node at a specific index.  Uses the fact that the list
     //       is doubly-linked to start from the front or the back, whichever
     //       is closer.
     private Node nodeAt(int index) {
@@ -161,22 +275,55 @@ public class ElementList {
         return current;
     }
     
-    /*
-	 * toString method
-     */
+	/*/////////////////////////////////////////////////////
+	 * 
+	 * toString methods
+	 * 
+	 */////////////////////////////////////////////////////
 	
     /**
      * converts the element data from the list node to a string
      */
-	public String toString() {
+    public String toString(){
+    	String result = "";
+		Node current = front;
+	    while (current != null) {
+	        result = result + (current.data).toString() + "\n";
+	        current = current.next;
+	    }
+		return result;
+    }
+    
+    
+    /**
+     * converts the element data from the list node to a string, sorting in ascending or descending order
+     */
+	public String toString(String direction) throws IllegalArgumentException{
+		if(direction != "asc" || direction != "desc"){
+			throw new IllegalArgumentException("direction must either be 'asc' or 'desc'");
+		}
         String result = "";
-        Node current = front;
-        while(current.next != null){
-            current = current.next;
-            result += current.data.toString() + "\n ";
-        }
-        return "List: \n" + result;
+		switch(direction){
+			case "asc": 
+		        Node currentAsc = front;
+		        while(currentAsc.next != null){
+		        	currentAsc = currentAsc.next;
+		            result += currentAsc.data.toString() + "\n ";
+		        }
+			case "desc":
+		        Node currentDesc = front;
+		        while(currentDesc.next != null){
+		        	currentDesc = currentDesc.next;
+		            result += currentDesc.data.toString() + "\n ";
+		        }
+		}
+		return result;
+
 	}
+	
+    /**
+     * converts the element data from the list node to a string
+     */
 	
     class LinkedIterator implements Iterator<Element> {
     	// location of next value to return
