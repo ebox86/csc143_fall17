@@ -6,7 +6,7 @@ package Wearables;
  *
  */
 public class Wearable {
-	private String ranking;
+	private int ranking;
 	private String name;
 	private double price;
 	private String bodyLocation;
@@ -32,7 +32,7 @@ public class Wearable {
 	 * @param companyState - the state or providence of the company
 	 * @param companyCountry - the country of origin of the company
 	 */
-	public Wearable(String ranking, String name, double price, String bodyLocation, String category, String companyName,
+	public Wearable(int ranking, String name, double price, String bodyLocation, String category, String companyName,
 			String companyURL, String companyAddress, String companyCity, String companyState, String companyCountry) {
 		this.ranking = ranking;
 		this.name = name;
@@ -50,8 +50,8 @@ public class Wearable {
 	///////////////////////////////////////
 	// GETTERS
 	///////////////////////////////////////
-	
-	public String getRanking() {
+
+	public int getRanking() {
 		return ranking;
 	}
 
@@ -94,55 +94,13 @@ public class Wearable {
 	public String getCompanyCountry() {
 		return companyCountry;
 	}
-	
-	///////////////////////////////////////
-	// SETTERS
-	///////////////////////////////////////
 
-	public void setRanking(String ranking) {
-		this.ranking = ranking;
+	@Override
+	public String toString() {
+		return "Wearable [ranking=" + ranking + ", name=" + name + ", price=" + price + ", bodyLocation=" + bodyLocation
+				+ ", category=" + category + ", companyName=" + companyName + ", companyURL=" + companyURL
+				+ ", companyAddress=" + companyAddress + ", companyCity=" + companyCity + ", companyState="
+				+ companyState + ", companyCountry=" + companyCountry + "]";
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public void setBodyLocation(String bodyLocation) {
-		this.bodyLocation = bodyLocation;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
-	public void setCompanyURL(String companyURL) {
-		this.companyURL = companyURL;
-	}
-
-	public void setCompanyAddress(String companyAddress) {
-		this.companyAddress = companyAddress;
-	}
-
-	public void setCompanyCity(String companyCity) {
-		this.companyCity = companyCity;
-	}
-
-	public void setCompanyState(String companyState) {
-		this.companyState = companyState;
-	}
-
-	public void setCompanyCountry(String companyCountry) {
-		this.companyCountry = companyCountry;
-	}
-	
-	
 
 }

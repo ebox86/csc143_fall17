@@ -1,12 +1,8 @@
 package Wearables;
 
-public abstract class Index {
-
-	public Index() {
-		
-	}
+public interface Index <T>{
 	
-	public abstract int search(Wearable w);
+	public abstract int search(T t);
 	
 	public abstract String toString();
 

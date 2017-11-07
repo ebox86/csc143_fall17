@@ -16,5 +16,9 @@ public class Demo {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+    	
+    	//System.out.println(myWearables.toString());
+    	int[] myIntArr = myWearables.getRankIndicies();
+    	System.out.println(myWearables.getRankReport(myIntArr));
 	}
 }
