@@ -1,75 +1,79 @@
 package Wearables;
 
+/**
+ * Creates an index of unique items and sorts them, based on a binary search tree
+ * @author evan kohout
+ *
+ * @param <T> the type of the object
+ */
 public class UniqueIndex<T extends Comparable<T>> {
 	private UniqueNode<T> root;
 	private T[] uniqueArr;
 	
-	public UniqueIndex(T[] rankingsArr) {
+	/**
+	 * creates a new UniqueIndex object
+	 * @param arr
+	 */
+	public UniqueIndex(T[] arr) {
 		this.root = null;
-		this.uniqueArr = rankingsArr;
-		for(int i = 0; i < rankingsArr.length; i++){
-			this.insert(rankingsArr[i], i);
+		this.uniqueArr = arr;
+		for(int i = 0; i < arr.length; i++){
+			this.add(arr[i], i);
 		}
 	}
-
-	private int search(T t) {
+	
+	/**
+	 * Used to retrieve an array of indices 
+	 * @return
+	 */
+	public int[] getArrayIndices(){
+		int[] returnArr = new int[uniqueArr.length];
+		String[] inOrder = searchInOrder(root).split("@");
+		for(int i = 0; i < inOrder.length; i++){
+			returnArr[i] = Integer.parseInt(inOrder[i]);
+		}
+		return returnArr;
+	}
+	
+	/**
+	 * Returns an array index for a given data value
+	 * @param t -- the value to be found
+	 * @return an int -- the index of the node for the given data
+	 */
+	public int search(T t){
 		UniqueNode<T> current = root;
-		int compareResult = current.data.compareTo(t);
-		while(current!=null){
-			if(current.data==t){
+		while(current != null){
+			if(current.data.compareTo(t) == 0){
 				return current.index;
-			}else if(compareResult == -1){
-				System.out.println(t.toString() + "going to the left");
+			} else if(current.data.compareTo(t) > 0){
 				current = current.left;
-			}else{
+			} else {
 				current = current.right;
 			}
 		}
 		return -1;
 	}
 	
-	public int[] getArrayIndicies(){
-		int[] returnArr = new int[uniqueArr.length];
-		for(int i = 0; i < uniqueArr.length; i++){
-			returnArr[i] = search((T)uniqueArr[i]);
-		}
-		return returnArr;
+	/*
+	 * used to search the BST using the inOrder method
+	 */
+	private String searchInOrder(UniqueNode<T> node){
+		if(node == null){
+			return "";
+		} 
+		return searchInOrder(node.left) + node.index + "@" + searchInOrder(node.right);
+		
 	}
-
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
-	
-	private void insert(T t, int pos){
-		UniqueNode<T> newNode = new UniqueNode<T>(t, pos);
-		if(root==null){
-			root = newNode;
-			return;
-		}
-		UniqueNode<T> current = root;
-		UniqueNode<T> parent = null;
-		int compareResult = current.data.compareTo(t);
-		while(true){
-			parent = current;
-			if(compareResult == -1){
-				System.out.println(t.toString() + "going to the left");
-				current = current.left;
-				if(current == null){
-					parent.left = newNode;
-					return;
-				}
-			} else {
-				System.out.println(t.toString() + "going to the right");
-				current = current.right;
-				if(current == null){
-					parent.right = newNode;
-					return;
-				}
-			}
+	/*
+	 * used to add a single item to the BST
+	 */
+	private boolean add (T t, int pos){
+		if( root == null){
+			root = new UniqueNode<T>(t, pos);
+			return true;
+		} else {
+			return root.add(t, pos);
 		}
 	}
 }

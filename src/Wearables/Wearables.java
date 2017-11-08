@@ -6,6 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Wearables -- used to build, store and output a list of wearable gadgets and accessories
+ * @author evan kohout
+ *
+ */
 public class Wearables {
 
 	private Wearable[] wearArr;
@@ -16,6 +21,11 @@ public class Wearables {
 	public Wearables() {
 	}
 	
+	/**
+	 * Takes a file of wearables as input and loads them into a wearable array, as new Wearable objects
+	 * @param file
+	 * @throws FileNotFoundException
+	 */
 	public void loadDataFromFile(File file) throws FileNotFoundException{
 		int size;
 		try {
@@ -40,32 +50,53 @@ public class Wearables {
 	            companyArr[pos] = w.getCompanyName();
 	            pos++;
 			}
+			br.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public int[] getRankIndicies(){
-		return new UniqueIndex<Integer>(rankArr).getArrayIndicies();
+	/**
+	 * returns an int array of the index values from the wearables array, sorted by rank
+	 * @return the int array
+	 */
+	public int[] getRankIndices(){
+		return new UniqueIndex<Integer>(rankArr).getArrayIndices();
 	}
 
+	/*
+	 * Not implemented yet
 	public void getPriceIndicies(){
-		
+		return new NonUniqueIndex<Double>(priceArr).getArrayIndicies();
 	}
+	*/
 	
+	/*
+	 * Not implemented yet
 	public void getCompanyIndicies(){
 		
 	}
+	*/
 	
+	/**
+	 * Returns a String containing a report of the wearable devices, sorted by rank
+	 * @param idxArr the input array of indices
+	 * @return
+	 */
 	public String getRankReport(int[] idxArr){
-		String s = "Wearables Rank Report: ";
+		String s = "Wearables Rank Report: \n"
+				+ "Rank\tProduct Name\n"
+				+ "====\t============\n";
 		for(int i = 0; i < idxArr.length; i++){
-			s += wearArr[idxArr[i]].toString() + "\n";
+			s += "#" + wearArr[idxArr[i]].getRanking() + ":\t" + wearArr[idxArr[i]].getName() + "\n";
 		}
 		return s;
 	}
 	
+	/**
+	 * toString method used to return a list of all wearable objects currently present
+	 */
 	@Override
 	public String toString() {
 		String s =  "Wearables [toString()=\n";
