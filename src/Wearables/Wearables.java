@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Wearables {
 
 	private Wearable[] wearArr;
-	private int[] rankArr;
+	private Integer[] rankArr;
 	private double[] priceArr;
 	private String[] companyArr;
 	
@@ -26,7 +26,7 @@ public class Wearables {
 		    int pos = 0;
 		    // initialize arrays
 		    wearArr = new Wearable[size];
-		    rankArr = new int[size];
+		    rankArr = new Integer[size];
 		    priceArr = new double[size];
 		    companyArr = new String[size];
 			while ((line = br.readLine()) != null){

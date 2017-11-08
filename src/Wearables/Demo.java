@@ -19,6 +19,7 @@ public class Demo {
     	
     	//System.out.println(myWearables.toString());
     	int[] myIntArr = myWearables.getRankIndicies();
+    	//myWearables.getRankReport(myIntArr);
     	System.out.println(myWearables.getRankReport(myIntArr));
 	}
 }

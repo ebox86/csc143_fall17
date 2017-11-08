@@ -1,8 +1,8 @@
 package Wearables;
 
-public class UniqueIndex<T> implements Index<T> {
-	private  UniqueNode<T> root;
-	private  T[] uniqueArr;
+public class UniqueIndex<T extends Comparable<T>> {
+	private UniqueNode<T> root;
+	private T[] uniqueArr;
 	
 	public UniqueIndex(T[] rankingsArr) {
 		this.root = null;
@@ -12,13 +12,14 @@ public class UniqueIndex<T> implements Index<T> {
 		}
 	}
 
-	@Override
-	public int search(T rank) {
+	private int search(T t) {
 		UniqueNode<T> current = root;
+		int compareResult = current.data.compareTo(t);
 		while(current!=null){
-			if(current.data==rank){
-				return current.arrayIndex;
-			}else if(current.data > rank){
+			if(current.data==t){
+				return current.index;
+			}else if(compareResult == -1){
+				System.out.println(t.toString() + "going to the left");
 				current = current.left;
 			}else{
 				current = current.right;
@@ -43,23 +44,26 @@ public class UniqueIndex<T> implements Index<T> {
 
 	
 	
-	public void insert(T rank, int pos){
-		UniqueNode<T> newNode = new UniqueNode<T>(rank, pos);
+	private void insert(T t, int pos){
+		UniqueNode<T> newNode = new UniqueNode<T>(t, pos);
 		if(root==null){
 			root = newNode;
 			return;
 		}
 		UniqueNode<T> current = root;
 		UniqueNode<T> parent = null;
+		int compareResult = current.data.compareTo(t);
 		while(true){
 			parent = current;
-			if(rank < current.data){
+			if(compareResult == -1){
+				System.out.println(t.toString() + "going to the left");
 				current = current.left;
 				if(current == null){
 					parent.left = newNode;
 					return;
 				}
 			} else {
+				System.out.println(t.toString() + "going to the right");
 				current = current.right;
 				if(current == null){
 					parent.right = newNode;
